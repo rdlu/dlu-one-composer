@@ -3,7 +3,7 @@ services:
   jupyter-spark:
     image: jupyter/all-spark-notebook
     volumes:
-      - ./notebooks:/home/jovyan/work/notebooks/
+      - ~/DataComposer/notebooks:/home/jovyan/work/notebooks/
     restart: unless-stopped
     labels:
       - traefik.enable=true

@@ -150,5 +150,5 @@
   # Default: true
   #
   # exposedByDefault = false
-  network = "traefik-net"
+  network = "net"
   defaultRule = "Host(`{{ normalize .Name }}.localhost`)"
