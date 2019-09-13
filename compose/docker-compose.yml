@@ -14,14 +14,14 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/traefik.toml:/traefik.toml
+      - ../config/traefik/traefik.toml:/traefik.toml
     labels:
       - traefik.http.routers.traefik.rule=Host(`monitor.localhost`)
       - traefik.http.services.traefik.loadbalancer.server.port=8080
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=web,websecure
     networks:
-        traefik_net:
+        net:
   portainer:
     image: portainer/portainer:latest
     command: -H unix:///var/run/docker.sock
@@ -34,13 +34,13 @@ services:
       - traefik.enable=true
       - traefik.http.routers.portainer.entrypoints=web,websecure
     networks:
-        traefik_net:
+        net:
   watchtower:
     image: containrrr/watchtower:latest
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock:ro
 networks:
-    traefik_net:
+    net:
 volumes:
   portainer:
