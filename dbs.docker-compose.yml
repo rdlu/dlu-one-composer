@@ -1,0 +1,23 @@
+version: '2.3'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb:/var/lib/mysql
+    labels:
+      - traefik.enable=false
+    networks:
+      mysql:
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DBS_PASSWORD-examplepassword}
+    runtime: nvidia
+    
+    
+networks:
+    mysql:
+volumes:
+  mariadb:

@@ -1,0 +1,46 @@
+version: '3.3'
+
+services:
+  traefik:
+    # The official v2.0 Traefik docker image
+    image: traefik:v2.0-alpine
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api --providers.docker
+    restart: always
+    ports:
+      # The HTTP port
+      - "80:80"
+      - "443:443"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.toml:/traefik.toml
+    labels:
+      - traefik.http.routers.traefik.rule=Host(`monitor.localhost`)
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+      - traefik.enable=true
+      - traefik.http.routers.traefik.entrypoints=web,websecure
+    networks:
+        traefik_net:
+  portainer:
+    image: portainer/portainer:latest
+    command: -H unix:///var/run/docker.sock
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - portainer:/data
+    labels:
+      - traefik.http.routers.portainer.rule=Host(`portainer.localhost`)
+      - traefik.enable=true
+      - traefik.http.routers.portainer.entrypoints=web,websecure
+    networks:
+        traefik_net:
+  watchtower:
+    image: containrrr/watchtower:latest
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+networks:
+    traefik_net:
+volumes:
+  portainer:
