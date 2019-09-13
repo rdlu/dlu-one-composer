@@ -28,6 +28,9 @@
   [entryPoints.websecure]
     address = ":443"
 
+  [entryPoints.traefik]
+    address = ":8080"
+
 ################################################################
 # Traefik logs configuration
 ################################################################
@@ -150,5 +153,3 @@
   # Default: true
   #
   # exposedByDefault = false
-  network = "net"
-  defaultRule = "Host(`{{ normalize .Name }}.localhost`)"
