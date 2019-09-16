@@ -23,6 +23,7 @@ services:
       - persistence:/bitnami
     networks:
       - default
+    restart: unless-stopped
   airflow-worker:
     image: bitnami/airflow-worker:latest
     labels:
@@ -41,6 +42,7 @@ services:
       - ~/DataComposer/airflow/dags:/opt/bitnami/airflow/dags
     networks:
       - default
+    restart: unless-stopped
   airflow-scheduler:
     image: bitnami/airflow-scheduler:latest
     labels:
@@ -52,6 +54,7 @@ services:
       - AIRFLOW_DATABASE_USERNAME=airflow
       - AIRFLOW_DATABASE_PASSWORD=$AIRFLOW_PASSWORD
       - AIRFLOW_LOAD_EXAMPLES=yes
+    restart: unless-stopped
     volumes:
       - persistence:/bitnami
       - ~/DataComposer/airflow/dags:/opt/bitnami/airflow/dags
