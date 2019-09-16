@@ -14,7 +14,6 @@ services:
       mysql:
     environment:
       MYSQL_ROOT_PASSWORD: ${DBS_PASSWORD-examplepassword}
-    runtime: nvidia
     
     
 networks:
