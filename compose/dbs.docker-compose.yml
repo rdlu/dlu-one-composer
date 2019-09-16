@@ -13,8 +13,7 @@ services:
     networks:
       mysql:
     environment:
-      MYSQL_ROOT_PASSWORD: ${DBS_PASSWORD-examplepassword}
-    
+      MYSQL_ROOT_PASSWORD: ${DBS_PASSWORD-examplepassword}    
     
 networks:
     mysql:
