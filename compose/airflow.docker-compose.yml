@@ -1,0 +1,89 @@
+# More info: https://github.com/bitnami/bitnami-docker-airflow
+version: '2'
+services:
+  postgresql:
+    image: 'bitnami/postgresql:latest'
+    labels:
+      - traefik.enable=false
+    environment:
+      - POSTGRESQL_DATABASE=airflow
+      - POSTGRESQL_USERNAME=airflow
+      - POSTGRESQL_PASSWORD=$AIRFLOW_PASSWORD
+    volumes:
+      - persistence:/bitnami/postgresql
+    networks:
+      - default
+  redis:
+    image: 'bitnami/redis:latest'
+    labels:
+      - traefik.enable=false
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - persistence:/bitnami
+    networks:
+      - default
+  airflow-worker:
+    image: bitnami/airflow-worker:latest
+    labels:
+      - traefik.enable=false
+    environment:
+      - AIRFLOW_FERNET_KEY=$AIRFLOW_FERNET_KEY
+      - AIRFLOW_EXECUTOR=CeleryExecutor
+      - AIRFLOW_DATABASE_NAME=airflow
+      - AIRFLOW_DATABASE_USERNAME=airflow
+      - AIRFLOW_DATABASE_PASSWORD=$AIRFLOW_PASSWORD
+      - AIRFLOW_LOAD_EXAMPLES=yes
+      - AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL=30
+      - AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL=30
+    volumes:
+      - persistence:/bitnami
+      - ~/DataComposer/airflow/dags:/opt/bitnami/airflow/dags
+    networks:
+      - default
+  airflow-scheduler:
+    image: bitnami/airflow-scheduler:latest
+    labels:
+      - traefik.enable=false
+    environment:
+      - AIRFLOW_FERNET_KEY=$AIRFLOW_FERNET_KEY
+      - AIRFLOW_EXECUTOR=CeleryExecutor
+      - AIRFLOW_DATABASE_NAME=airflow
+      - AIRFLOW_DATABASE_USERNAME=airflow
+      - AIRFLOW_DATABASE_PASSWORD=$AIRFLOW_PASSWORD
+      - AIRFLOW_LOAD_EXAMPLES=yes
+    volumes:
+      - persistence:/bitnami
+      - ~/DataComposer/airflow/dags:/opt/bitnami/airflow/dags
+    networks:
+      - default
+  airflow:
+    image: bitnami/airflow:latest
+    labels:
+      - traefik.http.services.airflow.loadbalancer.server.port=8080
+      - traefik.http.routers.airflow.rule=Host(`airflow.localhost`)
+      - traefik.docker.network=traefik_net
+    environment:
+      - AIRFLOW_FERNET_KEY=$AIRFLOW_FERNET_KEY
+      - AIRFLOW_EXECUTOR=CeleryExecutor
+      - AIRFLOW_DATABASE_NAME=airflow
+      - AIRFLOW_DATABASE_USERNAME=airflow
+      - AIRFLOW_DATABASE_PASSWORD=$AIRFLOW_PASSWORD
+      - AIRFLOW_PASSWORD=$AIRFLOW_PASSWORD
+      - AIRFLOW_USERNAME=airflow
+      - AIRFLOW_EMAIL=$AIRFLOW_EMAIL
+    volumes:
+      - persistence:/bitnami
+      - ~/DataComposer/airflow/dags:/opt/bitnami/airflow/dags
+    ports:
+      - 8900:8080
+    networks:
+      - traefik_net
+      - default
+
+volumes:
+  persistence:
+networks:
+  default:
+  traefik_net:
+    external: true
