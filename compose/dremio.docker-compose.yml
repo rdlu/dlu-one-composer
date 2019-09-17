@@ -1,0 +1,24 @@
+version: '3'
+services:
+  dremio:
+    image: dremio/dremio-oss:4.0
+    volumes:
+      - data:/var/lib/dremio
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dremio.rule=Host(`dremio.localhost`)
+      - traefik.http.routers.dremio.entrypoints=web,websecure
+      - traefik.http.services.dremio.loadbalancer.server.port=9047
+    ports:
+      # - "9047:9047"   # UI (HTTP) handled b traefik
+      - "31010:31010" # ODBC/JDBC clients
+      - "2181:2181"   # ZooKeeper
+      - "45678:45678" # Inter-node communication
+    networks:
+      - traefik_net
+networks:
+    traefik_net:
+      external: true
+volumes:
+  data:
