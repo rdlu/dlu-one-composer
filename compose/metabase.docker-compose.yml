@@ -9,6 +9,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.metabase.rule=Host(`metabase.localhost`)
       - traefik.http.routers.metabase.entrypoints=web,websecure
+      - traefik.docker.network=traefik_net
     environment:
       JAVA_TIMEZONE: America/Sao_Paulo
       MB_DB_FILE: /metabase-data/metabase.db
