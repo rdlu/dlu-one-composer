@@ -2,8 +2,8 @@
 
 set -q argv[1]; or set argv[1] traefik
 set PROJECT $argv[1]
-set UID (id -u (whoami))
-set GID (id -g (whoami))
+set -x UID (id -u (whoami))
+set -x GID (id -g (whoami))
 
 sudo systemctl start docker
 set_color cyan; echo "Making sure traefik is running..."

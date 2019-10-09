@@ -18,8 +18,8 @@ services:
       - traefik.http.services.datasci.loadbalancer.server.port=8888
     environment:
       JUPYTER_ENABLE_LAB: ${JUPYTER_ENABLE_LAB-yes}
-      NB_UID: ${UID-1000}
-      NB_GID: ${GID-1000}
+      NB_UID: $UID
+      NB_GID: $GID
     networks:
       - traefik_net
 networks:
