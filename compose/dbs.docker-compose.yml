@@ -35,7 +35,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.elastic.rule=Host(`elastic.localhost`)
       - traefik.http.routers.elastic.entrypoints=web,websecure
-      - traefik.http.services.elastic.loadbalancer.server.port=9200,9300
+      - traefik.http.services.elastic.loadbalancer.server.port=9200
     networks:
         mysql:
 networks:
