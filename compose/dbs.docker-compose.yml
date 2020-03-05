@@ -14,7 +14,15 @@ services:
       mysql:
     environment:
       MYSQL_ROOT_PASSWORD: ${DBS_PASSWORD-examplepassword}    
-    
+  redis:
+      image: redis:5-alpine
+      restart: unless-stopped
+      ports:
+        - "6379:6379"
+      labels:
+        - traefik.enable=false
+      networks:
+          mysql:
 networks:
     mysql:
 volumes:
