@@ -19,6 +19,7 @@ services:
           - traefik.http.services.elastic.loadbalancer.server.port=9200
         networks:
             traefik_net:
+            elastic:
 networks:
     elastic:
     traefik_net:
