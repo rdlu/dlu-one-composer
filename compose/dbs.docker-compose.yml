@@ -24,7 +24,7 @@ services:
     networks:
         mysql:
   elastic:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
     restart: unless-stopped
     ports:
       - "9200:9200"
@@ -37,9 +37,11 @@ services:
       - traefik.http.routers.elastic.entrypoints=web,websecure
       - traefik.http.services.elastic.loadbalancer.server.port=9200
     networks:
-        mysql:
+        traefik_net:
 networks:
     mysql:
+    traefik_net:
+      external: true
 volumes:
   mariadb:
   elastic:
