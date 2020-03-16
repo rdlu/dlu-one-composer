@@ -1,7 +1,7 @@
 version: '3'
 services:
   dremio:
-    image: dremio/dremio-oss:4.0
+    image: dremio/dremio-oss:latest
     volumes:
       - data:/var/lib/dremio
     restart: unless-stopped
@@ -13,8 +13,8 @@ services:
     ports:
       # - "9047:9047"   # UI (HTTP) handled b traefik
       - "31010:31010" # ODBC/JDBC clients
-      - "2181:2181"   # ZooKeeper
-      - "45678:45678" # Inter-node communication
+      # - "2181:2181"   # ZooKeeper
+      # - "45678:45678" # Inter-node communication
     networks:
       - traefik_net
 networks:
