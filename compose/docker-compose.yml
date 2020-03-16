@@ -3,11 +3,12 @@ version: '3.3'
 services:
   traefik:
     # The official v2.0 Traefik docker image
-    image: traefik:v2.0
+    image: traefik:latest
     # Enables the web UI and tells Traefik to listen to docker
     command: 
       - --api.insecure=true
       - --providers.docker=true
+      - --providers.docker.defaultRule=Host(`{{ trimPrefix `/` .Name }}.localhost`)
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
     restart: always
