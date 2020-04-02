@@ -1,5 +1,16 @@
 version: '3'
 services:
+  metadb:
+    image: postgres:alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DBS_USERS-postgres}
+      POSTGRES_PASSWORD: ${DBS_PASSWORD-examplepassword}
+      POSTGRES_DB: metabase
+    networks:
+      - metabase      
   metabase:
     image: metabase/metabase:latest
     volumes:
@@ -12,22 +23,25 @@ services:
       - traefik.docker.network=traefik_net
     environment:
       JAVA_TIMEZONE: America/Sao_Paulo
-      MB_DB_FILE: /metabase-data/metabase.db
-      # MB_DB_TYPE: postgres
-      # MB_DB_DBNAME: metabase
-      # MB_DB_PORT: 5432
-      # MB_DB_USER: metabase
-      # MB_DB_PASS: ''
-      # MB_DB_HOST: ''
+      # MB_DB_FILE: /metabase-data/metabase.db
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: 5432
+      MB_DB_USER: ${DBS_USERS-postgres}
+      MB_DB_PASS: ${DBS_PASSWORD-examplepassword}
+      MB_DB_HOST: 'metadb'
       MUID: $UID
       MGID: $GID
     networks:
       - traefik_net
       - dbs_mysql
+      - metabase
 networks:
     traefik_net:
       external: true
     dbs_mysql:
       external: true
+    metabase:
 volumes:
   data:
+  pgdata:
