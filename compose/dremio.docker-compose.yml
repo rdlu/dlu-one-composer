@@ -17,8 +17,11 @@ services:
       # - "45678:45678" # Inter-node communication
     networks:
       - traefik_net
+      - dbs_mysql
 networks:
     traefik_net:
+      external: true
+    dbs_mysql:
       external: true
 volumes:
   data:
