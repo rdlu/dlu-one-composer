@@ -4,18 +4,15 @@ services:
     image: jupyter/datascience-notebook
     command:
       - start-notebook.sh
-      - --LabApp.token='$JUPYTER_PASSWORD'
-      - --NotebookApp.token='$JUPYTER_PASSWORD'
-      # - --LabApp.password='${JUPYTER_PASSWORD-sha1:975a9425135d:7d3618cc7517de64f56fc930b2056af9b33468ba}'
-      # - --NotebookApp.password='${JUPYTER_PASSWORD-sha1:975a9425135d:7d3618cc7517de64f56fc930b2056af9b33468ba}'
     volumes:
       - ~/DataComposer/notebooks:/home/jovyan/work/notebooks/
     restart: unless-stopped
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.datasci.rule=Host(`datasci.localhost`)
-      - traefik.http.routers.datasci.entrypoints=web,websecure
-      - traefik.http.services.datasci.loadbalancer.server.port=8888
+      traefik.enable: true
+      traefik.http.routers.datasci.rule: Host(`datasci.localhost`)
+      traefik.http.routers.datasci.entrypoints: web,websecure
+      traefik.http.services.datasci.loadbalancer.server.port: 8888
+      traefik.http.routers.metabase.middlewares: traefik@docker
     environment:
       JUPYTER_ENABLE_LAB: ${JUPYTER_ENABLE_LAB-yes}
       NB_UID: $UID

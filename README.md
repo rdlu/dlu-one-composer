@@ -15,4 +15,6 @@ I'm using personally for my daily work and side projects
 
 ## Generating passwords for BasicAuth
 
-`htpasswd -nbB myusername MY_PASSWORD`
+`htpasswd -cB .passwd MYUSER`
+
+Requisites in Manjaro & Arch: `sudo pacman -S apache-tools`
