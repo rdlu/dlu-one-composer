@@ -12,3 +12,7 @@ I'm using personally for my daily work and side projects
  - Any external mounted directories will be mounted on `~/DataComposer/SERVICE`
  - Try to not repeat service names
  - Never expose unnecesary ports (this is why I use Traefik Proxy here)
+
+## Generating passwords for BasicAuth
+
+`htpasswd -nbB myusername MY_PASSWORD`
