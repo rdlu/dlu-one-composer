@@ -9,21 +9,34 @@ services:
     volumes:
       - mariadb:/var/lib/mysql
     labels:
-      - traefik.enable=false
+      traefik.enable: false
     networks:
       mysql:
     environment:
-      MYSQL_ROOT_PASSWORD: ${DBS_PASSWORD-examplepassword}    
+      MYSQL_ROOT_PASSWORD: ${DBS_PASSWORD-examplepassword}
+  postgres:
+    image: postgres:alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    labels:
+      traefik.enable: false
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DBS_USERS-postgres}
+      POSTGRES_PASSWORD: ${DBS_PASSWORD-examplepassword}
+    networks:
+      - pgdata  
   redis:
     image: redis:5-alpine
     restart: unless-stopped
     ports:
       - "6379:6379"
     labels:
-      - traefik.enable=false
+      traefik.enable: false
     networks:
         mysql:
 networks:
     mysql:
 volumes:
   mariadb:
+  pgdata:
