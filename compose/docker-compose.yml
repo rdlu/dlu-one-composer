@@ -21,12 +21,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ${PWD}/.passwd:/.passwd
     labels:
-      traefik.http.routers.traefik.rule: Host(`monitor.localhost`) || Host(`monitor.${TRAEFIK_HOST-lan}`) 
-      traefik.http.services.traefik.loadbalancer.server.port: 8080
       traefik.enable: true
+      traefik.http.routers.traefik.rule: Host(`monitor.localhost`) || Host(`monitor.${TRAEFIK_HOST-lan}`) 
+      traefik.http.routers.traefik.middlewares: traefik@docker
       traefik.http.routers.traefik.entrypoints: web,websecure
+      traefik.http.services.traefik.loadbalancer.server.port: 8080
       traefik.http.middlewares.traefik.basicauth.usersfile: /.passwd
-      traefik.http.routers.metabase.middlewares: traefik@docker
     networks:
         net:
   portainer:
