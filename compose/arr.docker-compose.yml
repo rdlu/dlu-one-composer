@@ -1,0 +1,85 @@
+version: '3.3'
+
+services:
+  sonarr:
+    image: linuxserver/sonarr
+    restart: unless-stopped
+    volumes:
+        - ${DOCKER_CONFIGS_PATH}/sonarr/:/config
+        - ${HOST_DOWNLOADS_PATH}/:/downloads
+        - ${HOST_TV_PATH}:/tv
+    environment:
+        PGID: $ARR_UID
+        PUID: $ARR_UID
+        TZ: America/Sao_Paulo
+    labels:
+        traefik.enable: true
+        traefik.http.routers.sonarr.rule: Host(`sonarr.localhost`) || Host(`sonarr.${TRAEFIK_HOST-lan}`) 
+        traefik.http.routers.sonarr.middlewares: traefik@docker
+        traefik.http.routers.sonarr.entrypoints: web,websecure
+        traefik.http.services.sonarr.loadbalancer.server.port: 8989
+    networks:
+        arr:
+        traefik_net:
+  radarr:
+    image: linuxserver/radarr
+    restart: unless-stopped
+    volumes:
+        - ${DOCKER_CONFIGS_PATH}/radarr/:/config
+        - ${HOST_DOWNLOADS_PATH}/:/downloads
+        - ${HOST_MOVIES_PATH}:/movies
+    environment:
+        PGID: $ARR_UID
+        PUID: $ARR_UID
+        TZ: America/Sao_Paulo
+    labels:
+        traefik.enable: true
+        traefik.http.routers.radarr.rule: Host(`radarr.localhost`) || Host(`radarr.${TRAEFIK_HOST-lan}`) 
+        traefik.http.routers.radarr.middlewares: traefik@docker
+        traefik.http.routers.radarr.entrypoints: web,websecure
+        traefik.http.services.radarr.loadbalancer.server.port: 7878
+    networks:
+        arr:
+        traefik_net:
+  heimdall:
+    image: linuxserver/heimdall
+    restart: unless-stopped
+    volumes:
+        - ${DOCKER_CONFIGS_PATH}/heimdall:/config
+    environment:
+        PGID: $GID
+        PUID: $UID
+        TZ: America/Sao_Paulo
+    labels:
+        traefik.enable: true
+        traefik.http.routers.heimdall.rule: Host(`heimdall.localhost`) || Host(`heimdall.${TRAEFIK_HOST-lan}`) 
+        traefik.http.routers.heimdall.middlewares: traefik@docker
+        traefik.http.routers.heimdall.entrypoints: web,websecure
+        traefik.http.services.heimdall.loadbalancer.server.port: 80
+    networks:
+        arr:
+        traefik_net:
+  medusa:
+    image: linuxserver/medusa
+    restart: unless-stopped
+    volumes:
+        - ${DOCKER_CONFIGS_PATH}/medusa:/config
+    environment:
+        PGID: $ARR_UID
+        PUID: $ARR_UID
+        TZ: America/Sao_Paulo
+    labels:
+        traefik.enable: true
+        traefik.http.routers.medusa.rule: Host(`medusa.localhost`) || Host(`medusa.${TRAEFIK_HOST-lan}`) 
+        traefik.http.routers.medusa.middlewares: traefik@docker
+        traefik.http.routers.medusa.entrypoints: web,websecure
+        traefik.http.services.medusa.loadbalancer.server.port: 8081
+    networks:
+        arr:
+        traefik_net:
+networks:
+    arr:
+    traefik_net:
+      external: true
+volumes:
+              
