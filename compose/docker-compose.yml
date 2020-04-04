@@ -11,6 +11,8 @@ services:
       - --providers.docker.defaultRule=Host(`{{ trimPrefix `/` .Name }}.localhost`)
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
+      - --providers.file.directory=/etc/traefik/
+      - --providers.file.watch=true
     restart: always
     ports:
       # The HTTP port
@@ -20,13 +22,19 @@ services:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ${PWD}/.passwd:/.passwd
+      - ${PWD}/certs/:/certs
+      - ${PWD}/configs/traefik/:/etc/traefik/
     labels:
       traefik.enable: true
       traefik.http.routers.traefik.rule: Host(`monitor.localhost`) || Host(`monitor.${TRAEFIK_HOST-lan}`) 
-      traefik.http.routers.traefik.middlewares: traefik@docker
+      # traefik.http.routers.traefik.middlewares: traefik@docker
       traefik.http.routers.traefik.entrypoints: web,websecure
+      traefik.http.routers.redirs.rule: hostregexp(`{host:.+${TRAEFIK_HOST-lan}}`)
+      traefik.http.routers.redirs.entrypoints: web
+      traefik.http.routers.redirs.middlewares: redirect-to-https
       traefik.http.services.traefik.loadbalancer.server.port: 8080
       traefik.http.middlewares.traefik.basicauth.usersfile: /.passwd
+      traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
     networks:
         net:
   portainer:
@@ -37,13 +45,16 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - portainer:/data
     labels:
-      traefik.http.routers.portainer.rule: Host(`portainer.localhost`) || Host(`portainer.${TRAEFIK_HOST-lan}`) 
+      traefik.http.routers.portainer.rule: Host(`portainer.ssl.localhost`) || Host(`portainer.localhost`) || Host(`portainer.${TRAEFIK_HOST-lan}`) 
       traefik.enable: true
-      traefik.http.routers.portainer.entrypoints: web,websecure
+      traefik.http.routers.portainer.entrypoints: websecure
+      traefik.http.routers.portainer.tls: true
     networks:
         net:
   watchtower:
     image: containrrr/watchtower:latest
+    labels:
+      traefik.enable: false
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock:ro
