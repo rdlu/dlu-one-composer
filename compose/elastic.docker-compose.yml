@@ -13,10 +13,11 @@ services:
         volumes:
           - elastic:/usr/share/elasticsearch/data 
         labels:
-          - traefik.enable=true
-          - traefik.http.routers.elastic.rule=Host(`elastic.localhost`)
-          - traefik.http.routers.elastic.entrypoints=web,websecure
-          - traefik.http.services.elastic.loadbalancer.server.port=9200
+          traefik.enable: true
+          traefik.http.routers.elastic.rule: Host(`elastic.localhost`)
+          traefik.http.routers.elastic.entrypoints: ${TRAEFIK_HOST-web,websecure}
+          traefik.http.routers.elastic.tls: ${SSL_ENABLE-false}
+          traefik.http.services.elastic.loadbalancer.server.port: 9200
         networks:
             traefik_net:
             elastic:

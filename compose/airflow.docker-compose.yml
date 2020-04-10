@@ -27,7 +27,7 @@ services:
   airflow-worker:
     image: bitnami/airflow-worker:latest
     labels:
-      - traefik.enable=false
+      traefik.enable: false
     environment:
       - AIRFLOW_FERNET_KEY=$AIRFLOW_FERNET_KEY
       - AIRFLOW_EXECUTOR=CeleryExecutor
@@ -63,9 +63,11 @@ services:
   airflow:
     image: bitnami/airflow:latest
     labels:
-      - traefik.http.services.airflow.loadbalancer.server.port=8080
-      - traefik.http.routers.airflow.rule=Host(`airflow.localhost`)
-      - traefik.docker.network=traefik_net
+      traefik.http.services.airflow.loadbalancer.server.port: 8080
+      traefik.http.routers.airflow.rule: Host(`airflow.localhost`)
+      traefik.http.routers.airflow.entrypoints: ${TRAEFIK_HOST-web,websecure}
+      traefik.http.routers.airflow.tls: ${SSL_ENABLE-false}
+      traefik.docker.network: traefik_net
     environment:
       - AIRFLOW_FERNET_KEY=$AIRFLOW_FERNET_KEY
       - AIRFLOW_EXECUTOR=CeleryExecutor

@@ -59,6 +59,8 @@ openssl \
 
 
 cat << EOF
+
+>--------------------------------------------------------------------<
 REMEMBER: Add the CA certificate to your target operating systems:
 
 # ArchLinux / Manjaro

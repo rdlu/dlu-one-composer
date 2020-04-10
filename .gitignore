@@ -1,3 +1,8 @@
 .env
 .vscode
 .passwd
+certs/*.key
+certs/*password
+certs/*.csr
+certs/*.crt
+certs/*.srl

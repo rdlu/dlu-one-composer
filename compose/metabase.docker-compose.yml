@@ -19,7 +19,8 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.metabase.rule: Host(`metabase.localhost`) || Host(`metabase.${TRAEFIK_HOST-lan}`)
-      traefik.http.routers.metabase.entrypoints: web,websecure
+      traefik.http.routers.metabase.entrypoints: ${TRAEFIK_HOST-web,websecure}
+      traefik.http.routers.metabase.tls: ${SSL_ENABLE-false}
       traefik.docker.network: traefik_net
     environment:
       JAVA_TIMEZONE: America/Sao_Paulo

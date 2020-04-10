@@ -28,7 +28,8 @@ services:
       traefik.enable: true
       traefik.http.routers.traefik.rule: Host(`monitor.localhost`) || Host(`monitor.${TRAEFIK_HOST-lan}`) 
       # traefik.http.routers.traefik.middlewares: traefik@docker
-      traefik.http.routers.traefik.entrypoints: web,websecure
+      traefik.http.routers.traefik.entrypoints: ${TRAEFIK_HOST-web,websecure}
+      traefik.http.routers.traefik.tls: ${SSL_ENABLE-false}
       traefik.http.routers.redirs.rule: hostregexp(`{host:.+${TRAEFIK_HOST-lan}}`)
       traefik.http.routers.redirs.entrypoints: web
       traefik.http.routers.redirs.middlewares: redirect-to-https
@@ -47,8 +48,8 @@ services:
     labels:
       traefik.http.routers.portainer.rule: Host(`portainer.ssl.localhost`) || Host(`portainer.localhost`) || Host(`portainer.${TRAEFIK_HOST-lan}`) 
       traefik.enable: true
-      traefik.http.routers.portainer.entrypoints: websecure
-      traefik.http.routers.portainer.tls: true
+      traefik.http.routers.portainer.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.portainer.tls: ${SSL_ENABLE-false}
     networks:
         net:
   watchtower:
