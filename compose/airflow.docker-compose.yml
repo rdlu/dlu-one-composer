@@ -64,7 +64,7 @@ services:
     image: bitnami/airflow:latest
     labels:
       traefik.http.services.airflow.loadbalancer.server.port: 8080
-      traefik.http.routers.airflow.rule: Host(`airflow.localhost`)
+      traefik.http.routers.airflow.rule: Host(`airflow.localhost`) || Host(`airflow.${TRAEFIK_HOST-lan}`)
       traefik.http.routers.airflow.entrypoints: ${TRAEFIK_HOST-web,websecure}
       traefik.http.routers.airflow.tls: ${SSL_ENABLE-false}
       traefik.docker.network: traefik_net

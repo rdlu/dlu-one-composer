@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
     labels:
       traefik.enable: true
-      traefik.http.routers.n8n.rule: Host(`n8n.localhost`)
+      traefik.http.routers.n8n.rule: Host(`n8n.localhost`) || Host(`n8n.${TRAEFIK_HOST-lan}`)
       traefik.http.routers.n8n.entrypoints: ${TRAEFIK_HOST-web,websecure}
       traefik.http.routers.n8n.tls: ${SSL_ENABLE-false}
       traefik.http.services.n8n.loadbalancer.server.port: 5678

@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     labels:
       traefik.enable: true
-      traefik.http.routers.dremio.rule: Host(`dremio.localhost`)
+      traefik.http.routers.dremio.rule: Host(`dremio.localhost`) || Host(`dremio.${TRAEFIK_HOST-lan}`)
       traefik.http.routers.dremio.entrypoints: ${TRAEFIK_HOST-web,websecure}
       traefik.http.routers.dremio.tls: ${SSL_ENABLE-false}
       traefik.http.services.dremio.loadbalancer.server.port: 9047

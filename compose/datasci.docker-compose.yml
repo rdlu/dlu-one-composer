@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     labels:
       traefik.enable: true
-      traefik.http.routers.datasci.rule: Host(`datasci.localhost`)
+      traefik.http.routers.datasci.rule: Host(`datasci.localhost`) || Host(`datasci.${TRAEFIK_HOST-lan}`)
       traefik.http.routers.datasci.entrypoints: ${TRAEFIK_HOST-web,websecure}
       traefik.http.routers.datasci.tls: ${SSL_ENABLE-false}
       traefik.http.services.datasci.loadbalancer.server.port: 8888
