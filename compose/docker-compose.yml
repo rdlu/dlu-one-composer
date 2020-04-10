@@ -28,7 +28,7 @@ services:
       traefik.enable: true
       traefik.http.routers.traefik.rule: Host(`monitor.localhost`) || Host(`monitor.${TRAEFIK_HOST-lan}`) 
       # traefik.http.routers.traefik.middlewares: traefik@docker
-      traefik.http.routers.traefik.entrypoints: ${TRAEFIK_HOST-web,websecure}
+      traefik.http.routers.traefik.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
       traefik.http.routers.traefik.tls: ${SSL_ENABLE-false}
       traefik.http.routers.redirs.rule: hostregexp(`{host:.+${TRAEFIK_HOST-lan}}`)
       traefik.http.routers.redirs.entrypoints: web

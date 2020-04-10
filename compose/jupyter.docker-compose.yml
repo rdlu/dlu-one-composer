@@ -15,12 +15,12 @@ services:
       traefik.enable: true
       traefik.http.routers.jupyter.rule: Host(`jupyter.localhost`) || Host(`jupyter.${TRAEFIK_HOST-lan}`)
       traefik.http.routers.jupyter.service: jupyter
-      traefik.http.routers.jupyter.entrypoints: ${TRAEFIK_HOST-web,websecure}
+      traefik.http.routers.jupyter.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
       traefik.http.routers.jupyter.tls: ${SSL_ENABLE-false}
       traefik.http.services.jupyter.loadbalancer.server.port: 8888
       traefik.http.routers.spark0.rule: Host(`spark.localhost`) || Host(`spark.${TRAEFIK_HOST-lan}`)
       traefik.http.routers.spark0.service: spark0
-      traefik.http.routers.spark0.entrypoints: ${TRAEFIK_HOST-web,websecure}
+      traefik.http.routers.spark0.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
       traefik.http.routers.spark0.tls: ${SSL_ENABLE-false}
       traefik.http.services.spark0.loadbalancer.server.port: 4040
     environment:

@@ -56,7 +56,7 @@ services:
         traefik.enable: true
         traefik.http.routers.heimdall.rule: Host(`heimdall.localhost`) || Host(`heimdall.${TRAEFIK_HOST-lan}`) || Host(`${TRAEFIK_HOST-lan}`) 
         traefik.http.routers.heimdall.middlewares: traefik@docker
-        traefik.http.routers.heimdall.entrypoints: ${TRAEFIK_HOST-web,websecure}
+        traefik.http.routers.heimdall.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
         traefik.http.routers.heimdall.tls: ${SSL_ENABLE-false}
         traefik.http.services.heimdall.loadbalancer.server.port: 80
     networks:
@@ -75,7 +75,7 @@ services:
         traefik.enable: true
         traefik.http.routers.medusa.rule: Host(`medusa.localhost`) || Host(`medusa.${TRAEFIK_HOST-lan}`) 
         traefik.http.routers.medusa.middlewares: traefik@docker
-        traefik.http.routers.medusa.entrypoints: ${TRAEFIK_HOST-web,websecure}
+        traefik.http.routers.medusa.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
         traefik.http.routers.medusa.tls: ${SSL_ENABLE-false}
         traefik.http.services.medusa.loadbalancer.server.port: 8081
     networks:
