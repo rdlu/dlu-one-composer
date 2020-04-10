@@ -16,7 +16,7 @@ services:
         traefik.enable: true
         traefik.http.routers.sonarr.rule: Host(`sonarr.localhost`) || Host(`sonarr.${TRAEFIK_HOST-lan}`) 
         traefik.http.routers.sonarr.middlewares: traefik@docker
-        traefik.http.routers.sonarr.entrypoints: ${TRAEFIK_HOST-web,websecure}
+        traefik.http.routers.sonarr.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
         traefik.http.routers.sonarr.tls: ${SSL_ENABLE-false}
         traefik.http.services.sonarr.loadbalancer.server.port: 8989
     networks:
@@ -37,7 +37,7 @@ services:
         traefik.enable: true
         traefik.http.routers.radarr.rule: Host(`radarr.localhost`) || Host(`radarr.${TRAEFIK_HOST-lan}`) 
         traefik.http.routers.radarr.middlewares: traefik@docker
-        traefik.http.routers.radarr.entrypoints: ${TRAEFIK_HOST-web,websecure}
+        traefik.http.routers.radarr.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
         traefik.http.routers.radarr.tls: ${SSL_ENABLE-false}
         traefik.http.services.radarr.loadbalancer.server.port: 7878
     networks:

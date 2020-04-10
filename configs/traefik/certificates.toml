@@ -1,8 +1,8 @@
 [[tls.certificates]] #first certificate
-  certFile = "/certs/localhost.crt"
-  keyFile = "/certs/localhost.key"
+  certFile = "/certs/samus.lan.crt"
+  keyFile = "/certs/samus.lan.key"
 [tls.stores]
   [tls.stores.default]
    [tls.stores.default.defaultCertificate] 
-      certFile = "/certs/localhost.crt"
-      keyFile = "/certs/localhost.key"
+      certFile = "/certs/samus.lan.crt"
+      keyFile = "/certs/samus.lan.key"
