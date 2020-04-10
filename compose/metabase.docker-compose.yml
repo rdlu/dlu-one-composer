@@ -5,6 +5,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
+    labels:
+      traefik.enable: false
     environment:
       POSTGRES_USER: ${DBS_USERS-postgres}
       POSTGRES_PASSWORD: ${DBS_PASSWORD-examplepassword}
