@@ -22,6 +22,7 @@ services:
       traefik.http.routers.ghost.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
       traefik.http.routers.ghost.tls: ${SSL_ENABLE-false}
       traefik.http.services.ghost.loadbalancer.server.port: 2368
+      traefik.docker.network: traefik_net
     volumes:
       - ~/DataComposer/ghost:/var/lib/ghost/content
     networks:
