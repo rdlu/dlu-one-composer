@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  fathom:
+    image: usefathom/fathom:latest
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      # Doesn't work yet, no support for query strings
+      traefik.http.routers.fathom-js.rule: Host(`fathom.${TRAEFIK_HOST-lan}`) && Path(`/tracker.js`, `/collect&{id:[0-9]+}`)
+      traefik.http.routers.fathom-js.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.fathom-js.tls: ${SSL_ENABLE-false}
+      traefik.http.routers.fathom.rule: Host(`fathom.localhost`) || Host(`fathom.${TRAEFIK_HOST-lan}`) 
+      traefik.http.routers.fathom.middlewares: traefik@docker
+      traefik.http.routers.fathom.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.fathom.tls: ${SSL_ENABLE-false}
+      traefik.http.services.fathom.loadbalancer.server.port: 8080
+      traefik.docker.network: traefik_net
+    networks:
+      traefik_net:
+      default:
+networks:
+  default:
+  traefik_net:
+    external: true
