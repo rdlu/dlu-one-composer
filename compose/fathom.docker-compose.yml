@@ -7,7 +7,7 @@ services:
     labels:
       traefik.enable: true
       # Doesn't work yet, no support for query strings
-      traefik.http.routers.fathom-js.rule: Host(`fathom.${TRAEFIK_HOST-lan}`) && Path(`/tracker.js`, `/collect&{id:[0-9]+}`)
+      traefik.http.routers.fathom-js.rule: Host(`fathom.${TRAEFIK_HOST-lan}`) && Path(`/tracker.js`, `/collect`)
       traefik.http.routers.fathom-js.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
       traefik.http.routers.fathom-js.tls: ${SSL_ENABLE-false}
       traefik.http.routers.fathom.rule: Host(`fathom.localhost`) || Host(`fathom.${TRAEFIK_HOST-lan}`) 
