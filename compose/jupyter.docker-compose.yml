@@ -2,6 +2,8 @@ version: '3'
 services:
   jupyter-spark:
     image: jupyter/all-spark-notebook
+    ports:
+      - 7077:7077
     command:
       - start-notebook.sh
       - --LabApp.token='$JUPYTER_PASSWORD'
