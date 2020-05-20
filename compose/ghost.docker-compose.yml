@@ -1,0 +1,55 @@
+version: '3.1'
+
+services:
+  ghost:
+    image: ghost:3-alpine
+    restart: unless-stopped
+    environment:
+      # see https://docs.ghost.org/docs/config#section-running-ghost-with-config-env-variables
+      database__client: mysql
+      database__connection__host: db
+      database__connection__user: ghost
+      database__connection__password: ${GHOST_PASSWORD-${DBS_PASSWORD-ghostpassword}}
+      database__connection__database: ghost
+      mail__transport: smtp
+      mail__options__service: Gmail
+      mail__options__auth__user: ${GMAIL_USER-throw_away@gmail_.com}
+      mail__options__auth__pass: ${GMAIL_PASS-throw_away_password}
+      url: https://ghost.${TRAEFIK_HOST-lan}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.ghost.rule: Host(`ghost.localhost`) || Host(`ghost.${TRAEFIK_HOST-lan}`) 
+      traefik.http.routers.ghost.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.ghost.tls: ${SSL_ENABLE-false}
+      traefik.http.services.ghost.loadbalancer.server.port: 2368
+      traefik.docker.network: traefik_net
+    volumes:
+      - ~/DataComposer/ghost:/var/lib/ghost/content
+    networks:
+      traefik_net:
+      default:
+
+  db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ghost
+      MYSQL_USER: ghost
+      MYSQL_PASSWORD: ${GHOST_PASSWORD-${DBS_PASSWORD-ghostpassword}}
+      MYSQL_ROOT_PASSWORD: ${DBS_PASSWORD-examplepassword}
+    labels:
+      traefik.enable: false
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      default:
+      dbs_mysql:
+
+volumes:
+  db:
+networks:
+  default:
+  dbs_mysql:
+    external: true
+  traefik_net:
+    external: true
