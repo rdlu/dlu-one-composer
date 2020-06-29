@@ -1,6 +1,6 @@
 version: '3'
 services:
-  dremio:
+  nifi:
     image: apache/nifi:latest
     volumes:
       - data:/opt/nifi/nifi-current
