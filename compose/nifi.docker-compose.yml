@@ -1,0 +1,23 @@
+version: '3'
+services:
+  dremio:
+    image: apache/nifi:latest
+    volumes:
+      - data:/opt/nifi/nifi-current
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.nifi.rule: Host(`nifi.localhost`) || Host(`nifi.${TRAEFIK_HOST-lan}`)
+      traefik.http.routers.nifi.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.nifi.tls: ${SSL_ENABLE-false}
+      traefik.http.services.nifi.loadbalancer.server.port: 8080
+    networks:
+      - traefik_net
+      - dbs_mysql
+networks:
+    traefik_net:
+      external: true
+    dbs_mysql:
+      external: true
+volumes:
+  data:
