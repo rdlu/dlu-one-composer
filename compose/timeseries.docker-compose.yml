@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+  timescale:
+    image: timescale/timescaledb:latest-pg12
+    volumes:
+      - timescale:/var/lib/postgresql/data
+    labels:
+      traefik.enable: false
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DBS_USERS-postgres}
+      POSTGRES_PASSWORD: ${DBS_PASSWORD-examplepassword}
+    networks:
+      - timescale  
+networks:
+    timescale:
+volumes:
+    timescale:
