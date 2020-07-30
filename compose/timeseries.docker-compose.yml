@@ -2,7 +2,7 @@ version: '3.2'
 
 services:
   timescale:
-    image: timescale/timescaledb:latest-pg12
+    image: timescale/timescaledb-postgis:latest-pg12
     volumes:
       - timescale:/var/lib/postgresql/data
     labels:
