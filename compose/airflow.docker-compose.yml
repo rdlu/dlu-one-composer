@@ -1,5 +1,5 @@
 # More info: https://github.com/bitnami/bitnami-docker-airflow
-version: '2'
+version: '3'
 services:
   postgresql:
     image: 'bitnami/postgresql:latest'
