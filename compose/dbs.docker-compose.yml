@@ -11,7 +11,7 @@ services:
     labels:
       traefik.enable: false
     networks:
-      mysql:
+      default:
     environment:
       MYSQL_ROOT_PASSWORD: ${DBS_PASSWORD-examplepassword}
   postgres:
@@ -25,7 +25,7 @@ services:
       POSTGRES_USER: ${DBS_USERS-postgres}
       POSTGRES_PASSWORD: ${DBS_PASSWORD-examplepassword}
     networks:
-      - pgdata  
+      - default  
   redis:
     image: redis:5-alpine
     restart: unless-stopped
@@ -34,9 +34,9 @@ services:
     labels:
       traefik.enable: false
     networks:
-        mysql:
+      default:
 networks:
-    mysql:
+    default:
 volumes:
   mariadb:
   pgdata:
