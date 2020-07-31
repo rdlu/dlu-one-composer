@@ -25,6 +25,7 @@ services:
       traefik.http.routers.spark0.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
       traefik.http.routers.spark0.tls: ${SSL_ENABLE-false}
       traefik.http.services.spark0.loadbalancer.server.port: 4040
+      traefik.docker.network: traefik_net
     environment:
       JUPYTER_ENABLE_LAB: ${JUPYTER_ENABLE_LAB-yes}
       NB_UID: $UID
