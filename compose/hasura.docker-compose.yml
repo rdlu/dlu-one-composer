@@ -1,0 +1,44 @@
+version: '3.6'
+
+services:
+  timescale:
+    image: timescale/timescaledb-postgis:latest-pg12
+    volumes:
+      - timescale:/var/lib/postgresql/data
+    labels:
+      traefik.enable: false
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DBS_USERS-postgres}
+      POSTGRES_PASSWORD: ${DBS_PASSWORD-examplepassword}
+    networks:
+      - hasura
+  hasura:
+    image: hasura/graphql-engine:v1.3.0
+    depends_on:
+      - "timescale"
+    restart: unless-stopped
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://${DBS_USERS-postgres}:${DBS_PASSWORD-examplepassword}@timescale:5432/postgres
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      ## uncomment next line to set an admin secret
+      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+    labels:
+      traefik.enable: true
+      traefik.http.routers.hasura.rule: Host(`hasura.localhost`) || Host(`hasura.${TRAEFIK_HOST-lan}`) 
+      traefik.http.routers.hasura.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.hasura.tls: ${SSL_ENABLE-false}
+      traefik.http.services.hasura.loadbalancer.server.port: 8080
+      traefik.docker.network: traefik_net
+    networks:
+      - hasura
+      - traefik_net
+networks:
+    hasura:
+    traefik_net:
+      external: true
+volumes:
+    timescale:
