@@ -8,6 +8,8 @@ services:
     labels:
       traefik.enable: false
     restart: unless-stopped
+    ports:
+      - 5442:5432
     environment:
       POSTGRES_USER: ${DBS_USERS-postgres}
       POSTGRES_PASSWORD: ${DBS_PASSWORD-examplepassword}
