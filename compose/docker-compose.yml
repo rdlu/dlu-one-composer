@@ -13,6 +13,7 @@ services:
       - --entrypoints.websecure.address=:443
       - --providers.file.directory=/etc/traefik/
       - --providers.file.watch=true
+      - --log.level=INFO
     restart: always
     ports:
       # The HTTP port
@@ -50,6 +51,7 @@ services:
       traefik.enable: true
       traefik.http.routers.portainer.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
       traefik.http.routers.portainer.tls: ${SSL_ENABLE-false}
+      traefik.http.services.portainer.loadbalancer.server.port: 9000
     networks:
         net:
   watchtower:
