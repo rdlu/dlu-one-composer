@@ -40,7 +40,7 @@ services:
     networks:
         net:
   portainer:
-    image: portainer/portainer:latest
+    image: portainer/portainer-ce:latest
     command: -H unix:///var/run/docker.sock
     restart: unless-stopped
     volumes:
