@@ -86,7 +86,10 @@ services:
       # Mounting an import folder is optional (see docs):
       - ${PHOTO_IMPORT-~/Import}:/photoprism/import
       # Permanent storage for settings, index & sidecar files (DON'T REMOVE):
-      - "./storage:/photoprism/storage"
+      - storage:/photoprism/storage
+    networks:
+      traefik_net:
+      default:
 
   mariadb:
     image: mariadb:10.5
@@ -102,11 +105,13 @@ services:
       MYSQL_DATABASE: photoprism
       MYSQL_USER: photoprism
       MYSQL_PASSWORD: ${DBS_PASSWORD-examplepassword}
+    networks:
+      default:
 
 volumes:
   mariadb:
+  storage:
 networks:
   default:
   traefik_net:
     external: true
-version: '3.5'
