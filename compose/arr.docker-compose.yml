@@ -19,6 +19,7 @@ services:
         traefik.http.routers.sonarr.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
         traefik.http.routers.sonarr.tls: ${SSL_ENABLE-false}
         traefik.http.services.sonarr.loadbalancer.server.port: 8989
+        traefik.docker.network: traefik_net
     networks:
         arr:
         traefik_net:
@@ -40,6 +41,7 @@ services:
         traefik.http.routers.radarr.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
         traefik.http.routers.radarr.tls: ${SSL_ENABLE-false}
         traefik.http.services.radarr.loadbalancer.server.port: 7878
+        traefik.docker.network: traefik_net
     networks:
         arr:
         traefik_net:
@@ -59,6 +61,7 @@ services:
         traefik.http.routers.heimdall.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
         traefik.http.routers.heimdall.tls: ${SSL_ENABLE-false}
         traefik.http.services.heimdall.loadbalancer.server.port: 80
+        traefik.docker.network: traefik_net
     networks:
         arr:
         traefik_net:
@@ -78,10 +81,20 @@ services:
         traefik.http.routers.medusa.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
         traefik.http.routers.medusa.tls: ${SSL_ENABLE-false}
         traefik.http.services.medusa.loadbalancer.server.port: 8081
+        traefik.docker.network: traefik_net
     networks:
         arr:
         traefik_net:
+  kms:
+    image: pykmsorg/py-kms
+    ports:
+      - 1688:1688
+    restart: unless-stopped
+    environment:
+      RENEWAL_INTERVAL: 259200
+      HWID: E6AFA63ABB63DE5F
+
 networks:
-    arr:
-    traefik_net:
-      external: true
+  arr:
+  traefik_net:
+    external: true
