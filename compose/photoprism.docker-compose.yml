@@ -109,3 +109,4 @@ networks:
   default:
   traefik_net:
     external: true
+version: '3.5'
