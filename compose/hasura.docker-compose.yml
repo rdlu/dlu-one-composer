@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
   timescale:
-    image: timescale/timescaledb-postgis:latest-pg12
+    image: timescale/timescaledb-postgis:latest-pg13
     volumes:
       - timescale:/var/lib/postgresql/data
     labels:
@@ -16,7 +16,7 @@ services:
     networks:
       - hasura
   hasura:
-    image: hasura/graphql-engine:v1.3.0
+    image: hasura/graphql-engine:v2.0.0-alpha.2
     depends_on:
       - "timescale"
     restart: unless-stopped
