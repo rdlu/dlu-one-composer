@@ -1,0 +1,31 @@
+version: "2.1"
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    environment:
+      - PUID=$UID
+      - PGID=$GID
+      - TZ=$TIMEZONE
+    volumes:
+      - $DOCKER_CONFIGS_PATH/heimdall:/config
+    ports:
+      - 56080:80
+      - 56443:443
+    restart: unless-stopped
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.heimdall.rule: Host(`heimdall.localhost`) || Host(`${TRAEFIK_HOST-lan}`)
+      traefik.http.routers.heimdall.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.heimdall.tls: ${SSL_ENABLE-false}
+      traefik.http.services.hemldall.loadbalancer.server.port: 80
+      traefik.docker.network: traefik_net
+    networks:
+      traefik_net:
+      default:
+
+networks:
+  default:
+  traefik_net:
+    external: true

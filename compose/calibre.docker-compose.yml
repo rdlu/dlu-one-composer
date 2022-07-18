@@ -1,0 +1,30 @@
+version: "2.1"
+services:
+  calibre-web:
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
+    environment:
+      - PUID=$UID
+      - PGID=$GID
+      - TZ=$TIMEZONE
+      - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
+      - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
+    volumes:
+      - $DOCKER_CONFIGS_PATH/calibre-web:/config
+      - $BOOKS_DIR:/books
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.calibre-web.rule: Host(`books.localhost`) || Host(`books.${TRAEFIK_HOST-lan}`)
+      traefik.http.routers.calibre-web.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.calibre-web.tls: ${SSL_ENABLE-false}
+      traefik.http.services.calibre-web.loadbalancer.server.port: 8083
+      traefik.docker.network: traefik_net
+    networks:
+      traefik_net:
+      default:
+
+networks:
+  default:
+  traefik_net:
+    external: true

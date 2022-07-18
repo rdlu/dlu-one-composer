@@ -1,0 +1,54 @@
+version: '3.7'
+
+services:
+  server:
+    container_name: minecraft-peaceful
+    image: itzg/minecraft-bedrock-server
+    restart: unless-stopped
+    environment:
+      EULA: "TRUE"
+      GAMEMODE: survival
+      DIFFICULTY: peaceful
+      UID: 1000
+      GID: 1000
+      ALLOW_CHEATS: "true"
+      OPS: "2533274899979156"
+      ONLINE_MODE: "false"
+      SERVER_PORT: 19132
+      SERVER_PORT_V6: 19133
+    ports:
+      - '60601:19132/udp'
+      - '60602:19133/udp'
+    volumes:
+      - /home/rdlu/Minecraft/data:/data
+    stdin_open: true
+    tty: true
+  server-2:
+    container_name: minecraft-easy
+    image: itzg/minecraft-bedrock-server
+    restart: unless-stopped
+    environment:
+      EULA: "TRUE"
+      GAMEMODE: survival
+      DIFFICULTY: easy
+      UID: 1000
+      GID: 1000
+      ALLOW_CHEATS: "true"
+      OPS: "2533274899979156"
+      ONLINE_MODE: "false"
+      SERVER_PORT: 19132
+      SERVER_PORT_V6: 19133
+    ports:
+      - '60603:19132/udp'
+      - '60604:19133/udp'
+    volumes:
+      - /home/rdlu/Minecraft/data_2:/data
+    stdin_open: true
+    tty: true
+  manymine:
+    image: illiteratealliterator/manymine
+    container_name: manymine
+    ports:
+      - '19132:19132/udp'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
