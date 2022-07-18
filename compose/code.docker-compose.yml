@@ -1,0 +1,30 @@
+version: "2.1"
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    environment:
+      - PUID=$UID
+      - PGID=$GID
+      - TZ=$TIMEZONE
+      - PASSWORD="$CODE_PASSWORD"
+      - SUDO_PASSWORD="$CODE_PASSWORD"
+    volumes:
+      - $DOCKER_CONFIGS_PATH/code-server:/config
+      - $CODE_PROJECTS:/projects
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.code.rule: Host(`code.localhost`) || Host(`code.${TRAEFIK_HOST-lan}`)
+      traefik.http.routers.code.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.code.tls: ${SSL_ENABLE-false}
+      traefik.http.services.code.loadbalancer.server.port: 8443
+      traefik.docker.network: traefik_net
+    networks:
+      traefik_net:
+      default:
+
+networks:
+  default:
+  traefik_net:
+    external: true
