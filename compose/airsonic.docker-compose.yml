@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  airsonic:
+    image: lscr.io/linuxserver/airsonic-advanced:latest
+    container_name: airsonic
+    environment:
+      - PUID=$UID
+      - PGID=$GID
+      - TZ=$TIMEZONE
+    volumes:
+      - $DOCKER_CONFIGS_PATH/airsonic:/config
+      - $MUSIC_DIR:/music
+      - $MUSIC_DIR/playlists:/playlists
+      - $MUSIC_DIR/podcasts:/podcasts
+    ports:
+      - 4040:4040
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.airsonic.rule: Host(`music.localhost`) || Host(`music.${TRAEFIK_HOST-lan}`)
+      traefik.http.routers.airsonic.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.airsonic.tls: ${SSL_ENABLE-false}
+      traefik.http.services.airsonic.loadbalancer.server.port: 4040
+      traefik.docker.network: traefik_net
+    networks:
+      traefik_net:
+      default:
+
+networks:
+  default:
+  traefik_net:
+    external: true
+                                                                

@@ -1,8 +1,8 @@
 [[tls.certificates]] #first certificate
-  certFile = "/certs/samus.lan.crt"
-  keyFile = "/certs/samus.lan.key"
+  certFile = "/certs/aeris.lan.crt"
+  keyFile = "/certs/aeris.lan.key"
 [tls.stores]
   [tls.stores.default]
    [tls.stores.default.defaultCertificate] 
-      certFile = "/certs/samus.lan.crt"
-      keyFile = "/certs/samus.lan.key"
+      certFile = "/certs/aeris.lan.crt"
+      keyFile = "/certs/aeris.lan.key"

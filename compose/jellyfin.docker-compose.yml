@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=$UID
+      - PGID=$GID
+      - TZ=$TIMEZONE
+      - JELLYFIN_PublishedServerUrl=192.168.1.10
+    volumes:
+      - $DOCKER_CONFIGS_PATH:/config
+      - $TV_SHOWS_DIR:/data/tvshows
+      - $MOVIES_DIR:/data/movies
+      - $ANIMES_DIR:/data/animes
+      - $BOOKS_DIR:/data/calibre
+      - $SHOWS_DIR:/data/music-shows
+      - $MUSIC_DIR:/data/music
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.jellyfin.rule: Host(`videos.localhost`) || Host(`videos.${TRAEFIK_HOST-lan}`)
+      traefik.http.routers.jellyfin.entrypoints: ${TRAEFIK_ENTRYPOINTS-web,websecure}
+      traefik.http.routers.jellyfin.tls: ${SSL_ENABLE-false}
+      traefik.http.services.jellyfin.loadbalancer.server.port: 8096
+      traefik.docker.network: traefik_net
+    networks:
+      traefik_net:
+      default:
+              
+networks:
+  default:
+  traefik_net:
+    external: true
