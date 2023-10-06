@@ -14,3 +14,6 @@ services:
       proxy:
 networks:
     proxy:
+volumes:
+  data:
+  letsencrypt:
