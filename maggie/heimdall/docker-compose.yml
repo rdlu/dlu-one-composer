@@ -1,0 +1,20 @@
+version: "2.1"
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    environment:
+      - PUID=$UID
+      - PGID=$GID
+      - TZ=$TIMEZONE
+    volumes:
+      - data:/config
+    restart: unless-stopped
+    networks:
+      nginx_proxy:
+
+networks:
+  nginx_proxy:
+    external: true
+volumes:
+  data:
