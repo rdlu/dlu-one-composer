@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  freshrss:
+    image: linuxserver/freshrss
+    container_name: freshrss
+    environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=${TIMEZONE-UTC}
+    volumes:
+        - data:/config
+    restart: unless-stopped
+    networks:
+        nginx_proxy:
+
+networks:
+  nginx_proxy:
+    external: true
+volumes:
+  data:
